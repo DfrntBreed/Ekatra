@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Ekatra</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .chat-box {
+            background: #fff;
+            padding: 15px;
+            height: 400px;
+            overflow-y: auto;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+
+        .user {
+            background-color: #ffcfdf;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .bot {
+            background-color: #d0f4de;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .chat-input button {
+            padding: 12px 20px;
+            background: #ff5f5f;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background: #e54848;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 id="greeting">Hi there 👋</h1>
+
+        <div class="chat-box" id="chatBox">
+            <!-- Messages will appear here -->
+        </div>
+
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Type your message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem("ekatraUser"));
+        const greeting = document.getElementById("greeting");
+        const chatBox = document.getElementById("chatBox");
+
+        if (user?.name) {
+            greeting.innerText = `Hi ${user.name} 👋, I'm Ekatra`;
+        }
+
+        const botReplies = [
+            "I'm here for you ❤️",
+            "Tell me more about it...",
+            "That sounds tough. I'm listening.",
+            "Wanna talk about something fun?",
+            "You're not alone. I'm with you 💫",
+            "Take a deep breath. You're doing okay.",
+        ];
+
+        function sendMessage() {
+            const input = document.getElementById("userInput");
+            const text = input.value.trim();
+            if (!text) return;
+
+            appendMessage(text, "user");
+
+            setTimeout(() => {
+                const reply = botReplies[Math.floor(Math.random() * botReplies.length)];
+                appendMessage(reply, "bot");
+            }, 800);
+
+            input.value = "";
+        }
+
+        function appendMessage(message, sender) {
+            const msgDiv = document.createElement("div");
+            msgDiv.classList.add("message", sender);
+            msgDiv.innerText = message;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+
+</body>
+
+</html>

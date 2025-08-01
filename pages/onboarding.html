@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get Started - Ekatra</title>
+    <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Hey! I'm Ekatra 👋</h1>
+        <p>Before we begin, tell me a bit about you…</p>
+
+        <form id="onboardingForm">
+            <input type="text" name="name" placeholder="What's your name?" required /><br />
+            <input type="number" name="age" placeholder="Your age?" required /><br />
+            <input type="text" name="city" placeholder="Where do you live?" /><br />
+            <textarea name="interests" placeholder="Your hobbies or interests..."></textarea><br />
+
+            <button type="submit">Let's Go 💬</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('onboardingForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const userData = {};
+            for (let [key, value] of formData.entries()) {
+                userData[key] = value;
+            }
+
+            // Store user data in localStorage for now
+            localStorage.setItem("ekatraUser", JSON.stringify(userData));
+
+            // Redirect to chat page
+            window.location.href = "chat.html";
+        });
+    </script>
+
+</body>
+
+</html>

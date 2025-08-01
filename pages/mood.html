@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Mood Today</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .mood-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .mood {
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .mood:hover {
+            transform: scale(1.05);
+        }
+
+        .mood span {
+            font-size: 0.9rem;
+            margin-top: 8px;
+            color: #333;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Hey friend 👋</h1>
+        <p>How are you feeling today?</p>
+
+        <div class="mood-container">
+            <div class="mood" onclick="selectMood('Happy')">😊<span>Happy</span></div>
+            <div class="mood" onclick="selectMood('Sad')">😔<span>Sad</span></div>
+            <div class="mood" onclick="selectMood('Angry')">😠<span>Angry</span></div>
+            <div class="mood" onclick="selectMood('Anxious')">😰<span>Anxious</span></div>
+            <div class="mood" onclick="selectMood('Lonely')">😞<span>Lonely</span></div>
+            <div class="mood" onclick="selectMood('Excited')">🤩<span>Excited</span></div>
+        </div>
+    </div>
+
+    <script>
+        function selectMood(mood) {
+            const user = JSON.parse(localStorage.getItem("ekatraUser")) || {};
+            user.mood = mood;
+            localStorage.setItem("ekatraUser", JSON.stringify(user));
+            window.location.href = "chat.html";
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Profile - Ekatra</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .profile-box {
+            background: #fff;
+            padding: 30px;
+            margin-top: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .profile-box h2 {
+            margin-bottom: 15px;
+            color: #ff5f5f;
+        }
+
+        .profile-box p {
+            margin: 8px 0;
+            font-size: 1.1rem;
+        }
+
+        .reset-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Your Profile 🧑‍💻</h1>
+
+        <div class="profile-box" id="profileBox">
+            <h2>Hello, friend!</h2>
+            <p><strong>Name:</strong> <span id="userName">...</span></p>
+            <p><strong>Age:</strong> <span id="userAge">...</span></p>
+            <p><strong>Mood Today:</strong> <span id="userMood">...</span></p>
+            <button class="reset-btn" onclick="resetProfile()">Reset & Start Over</button>
+        </div>
+    </div>
+
+    <script>
+        const userData = JSON.parse(localStorage.getItem("ekatraUser"));
+
+        if (userData) {
+            document.getElementById("userName").textContent = userData.name || "Unknown";
+            document.getElementById("userAge").textContent = userData.age || "N/A";
+            document.getElementById("userMood").textContent = userData.mood || "Not selected";
+        } else {
+            document.getElementById("profileBox").innerHTML = "<p>User data not found. <a href='onboarding.html'>Start here</a>.</p>";
+        }
+
+        function resetProfile() {
+            localStorage.removeItem("ekatraUser");
+            window.location.href = "onboarding.html";
+        }
+    </script>
+
+</body>
+
+</html>
