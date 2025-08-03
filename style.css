@@ -19,9 +19,12 @@ h1 {
 }
 
 .main-img {
-  width: 250px;
-  margin: 20px 0;
+  width: 200px;
+  margin: 20px auto;
+  display: block;
+  padding-bottom: 20px;
 }
+
 
 button {
   padding: 15px 30px;
