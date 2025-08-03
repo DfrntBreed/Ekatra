@@ -3,9 +3,8 @@
 **Ekatra** is a simple AI friend web app built as a college project.
 
 ## Features
-- Onboarding screen for new users
 - Mood tracking
-- Chat with AI (Mahi)
+- Chat with AI (Ekatra)
 - User profile page
 
 ## Tech Stack
