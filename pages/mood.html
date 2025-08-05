@@ -53,7 +53,7 @@
 <body>
 
     <div class="container">
-        <h1>Hey friend 👋</h1>
+        <h1 id="greeting">Hey friend 👋</h1>
         <p>How are you feeling today?</p>
 
         <div class="mood-container">
@@ -67,10 +67,17 @@
     </div>
 
     <script>
+        // Personalized greeting
+        const user = JSON.parse(localStorage.getItem("ekatraUser")) || {};
+        if (user?.name) {
+            document.getElementById("greeting").innerText = `Hey ${user.name} 👋`;
+        }
+
+        // Mood selection handler
         function selectMood(mood) {
-            const user = JSON.parse(localStorage.getItem("ekatraUser")) || {};
             user.mood = mood;
             localStorage.setItem("ekatraUser", JSON.stringify(user));
+            alert(`Got it! You’re feeling ${mood} today.`);
             window.location.href = "chat.html";
         }
     </script>
