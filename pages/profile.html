@@ -4,77 +4,140 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your Profile - Ekatra</title>
-    <link rel="stylesheet" href="../style.css">
+    <title>Chat with Mahi - Ekatra</title>
+    <link rel="stylesheet" href="../style.css" />
     <style>
-        .profile-box {
-            background: #fff;
-            padding: 30px;
-            margin-top: 40px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f6f6f6;
         }
 
-        .profile-box h2 {
-            margin-bottom: 15px;
-            color: #ff5f5f;
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        .profile-box p {
-            margin: 8px 0;
-            font-size: 1.1rem;
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding-right: 5px;
         }
 
-        .reset-btn {
-            margin-top: 20px;
-            padding: 12px 25px;
-            background-color: #e74c3c;
-            color: #fff;
+        .message {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 75%;
+            word-wrap: break-word;
+        }
+
+        .user {
+            background-color: #d1f1ff;
+            align-self: flex-end;
+        }
+
+        .bot {
+            background-color: #ffe3e3;
+            align-self: flex-start;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .input-area button {
+            padding: 12px 20px;
+            background-color: #ff5f5f;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 20px;
+            color: white;
             cursor: pointer;
             transition: background 0.3s ease;
         }
 
-        .reset-btn:hover {
-            background-color: #c0392b;
+        .input-area button:hover {
+            background-color: #e04848;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h1>Your Profile 🧑‍💻</h1>
+    <div class="chat-container">
+        <div class="messages" id="messages"></div>
 
-        <div class="profile-box" id="profileBox">
-            <h2>Hello, friend!</h2>
-            <p><strong>Name:</strong> <span id="userName">...</span></p>
-            <p><strong>Age:</strong> <span id="userAge">...</span></p>
-            <p><strong>Mood Today:</strong> <span id="userMood">...</span></p>
-            <button class="reset-btn" onclick="resetProfile()">Reset & Start Over</button>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
         </div>
     </div>
 
     <script>
-        const userData = JSON.parse(localStorage.getItem("ekatraUser"));
+        const messagesDiv = document.getElementById("messages");
+        const userInput = document.getElementById("userInput");
 
-        if (userData) {
-            document.getElementById("userName").textContent = userData.name || "Unknown";
-            document.getElementById("userAge").textContent = userData.age || "N/A";
-            document.getElementById("userMood").textContent = userData.mood || "Not selected";
-        } else {
-            document.getElementById("profileBox").innerHTML = "<p>User data not found. <a href='onboarding.html'>Start here</a>.</p>";
+        // Load existing chat
+        let chatHistory = JSON.parse(localStorage.getItem("ekatraChat")) || [];
+
+        function renderMessages() {
+            messagesDiv.innerHTML = "";
+            chatHistory.forEach(msg => {
+                const div = document.createElement("div");
+                div.className = `message ${msg.sender}`;
+                div.textContent = msg.text;
+                messagesDiv.appendChild(div);
+            });
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        function resetProfile() {
-            localStorage.removeItem("ekatraUser");
-            window.location.href = "onboarding.html";
+        function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            chatHistory.push({ sender: "user", text });
+            renderMessages();
+            userInput.value = "";
+
+            // Save user message
+            localStorage.setItem("ekatraChat", JSON.stringify(chatHistory));
+
+            // Simulated bot response
+            setTimeout(() => {
+                const reply = generateBotReply(text);
+                chatHistory.push({ sender: "bot", text: reply });
+                localStorage.setItem("ekatraChat", JSON.stringify(chatHistory));
+                renderMessages();
+            }, 800);
         }
+
+        function generateBotReply(input) {
+            const replies = [
+                "Interesting!",
+                "Tell me more!",
+                "Hmm... I’m thinking 🤔",
+                "That's cool, Kaamar!",
+                "Why do you feel that way?",
+                "I'm always here for you."
+            ];
+            return replies[Math.floor(Math.random() * replies.length)];
+        }
+
+        renderMessages();
     </script>
 
 </body>
