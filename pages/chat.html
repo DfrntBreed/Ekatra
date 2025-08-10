@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chat with Mahi - Ekatra</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
@@ -74,69 +75,88 @@
     }
   </style>
 </head>
+
 <body>
 
-<div class="chat-container">
-  <div class="messages" id="messages"></div>
+  <div class="chat-container">
+    <div class="messages" id="messages"></div>
 
-  <div class="input-area">
-    <input type="text" id="userInput" placeholder="Type a message..." />
-    <button onclick="sendMessage()">Send</button>
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type a message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
   </div>
-</div>
 
-<script>
-  const messagesDiv = document.getElementById("messages");
-  const userInput = document.getElementById("userInput");
+  <script src="../app.js"></script>
 
-  // Load existing chat
-  let chatHistory = JSON.parse(localStorage.getItem("ekatraChat")) || [];
+  <script>
+    async function getAIReply(userMessage) {
+      const res = await fetch("http://localhost:5000/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: userMessage })
+      });
 
-  function renderMessages() {
-    messagesDiv.innerHTML = "";
-    chatHistory.forEach(msg => {
-      const div = document.createElement("div");
-      div.className = `message ${msg.sender}`;
-      div.textContent = msg.text;
-      messagesDiv.appendChild(div);
-    });
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
+      const data = await res.json();
+      return data.reply;
+    }
 
-  function sendMessage() {
-    const text = userInput.value.trim();
-    if (!text) return;
+    const messagesDiv = document.getElementById("messages");
+    const userInput = document.getElementById("userInput");
 
-    chatHistory.push({ sender: "user", text });
-    renderMessages();
-    userInput.value = "";
+    // Load existing chat
+    let chatHistory = JSON.parse(localStorage.getItem("ekatraChat")) || [];
 
-    // Save user message
-    localStorage.setItem("ekatraChat", JSON.stringify(chatHistory));
+    function renderMessages() {
+      messagesDiv.innerHTML = "";
+      chatHistory.forEach(msg => {
+        const div = document.createElement("div");
+        div.className = `message ${msg.sender}`;
+        div.textContent = msg.text;
+        messagesDiv.appendChild(div);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
 
-    // Simulated bot response
-    setTimeout(() => {
-      const reply = generateBotReply(text);
-      chatHistory.push({ sender: "bot", text: reply });
-      localStorage.setItem("ekatraChat", JSON.stringify(chatHistory));
+    async function sendMessage() {
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      chatHistory.push({ sender: "user", text });
       renderMessages();
-    }, 800);
-  }
+      userInput.value = "";
 
-  function generateBotReply(input) {
-    const replies = [
-      "Interesting!",
-      "Tell me more!",
-      "Hmm... I’m thinking 🤔",
-      "That's cool, Kaamar!",
-      "Why do you feel that way?",
-      "I'm always here for you."
-    ];
-    return replies[Math.floor(Math.random() * replies.length)];
-  }
+      localStorage.setItem("ekatraChat", JSON.stringify(chatHistory));
 
-  renderMessages();
-</script>
+      try {
+        const reply = await getAIReply(text);
+        chatHistory.push({ sender: "bot", text: reply });
+        localStorage.setItem("ekatraChat", JSON.stringify(chatHistory));
+        renderMessages();
+      } catch (error) {
+        console.error("Error getting AI reply:", error);
+        chatHistory.push({ sender: "bot", text: "Sorry, I couldn't respond right now." });
+        renderMessages();
+      }
+    }
+
+    function generateBotReply(input) {
+      const replies = [
+        "Interesting!",
+        "Tell me more!",
+        "Hmm... I’m thinking 🤔",
+        "That's cool, Kaamar!",
+        "Why do you feel that way?",
+        "I'm always here for you."
+      ];
+      return replies[Math.floor(Math.random() * replies.length)];
+    }
+
+    renderMessages();
+  </script>
 
 </body>
+
 </html>
